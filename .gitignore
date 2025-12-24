@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Temp files
+*.log
+
+# Run artifacts
+output.json
