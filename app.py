@@ -26,11 +26,16 @@ def run_extractor(pdf_path: str) -> Tuple[Dict[str, Any], str]:
         cmd,
         capture_output=True,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         check=False,
     )
 
     stdout = (proc.stdout or "").strip()
     stderr = (proc.stderr or "").strip()
+    
+    if stderr.strip():
+        st.code(stderr, language="text")    
 
     if proc.returncode != 0:
         # Show stderr + any stdout for debugging

@@ -191,3 +191,11 @@ This system treats LLMs as **components**, not authorities:
 * Humans decide
 
 That separation is the difference between a demo and a production system.
+
+---
+
+## License
+
+This project is source-available.
+Commercial use, redistribution, or resale requires permission.
+See LICENSE for details.
