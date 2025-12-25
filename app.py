@@ -6,24 +6,26 @@ import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
-
+import sys
 import streamlit as st
 
 
 APP_TITLE = "SDS Extractor — Drag & Drop Tester"
 APP_SUBTITLE = "Upload an SDS PDF → run your extractor → view JSON + warnings → download result"
-
+PROJECT_ROOT = Path(__file__).resolve().parent
+PYTHON = sys.executable
 
 def run_extractor(pdf_path: str) -> Tuple[Dict[str, Any], str]:
     """
     Runs your existing CLI extractor and returns (parsed_json, raw_stdout).
     Assumes: python src/main.py <pdf_path>
     """
-    cmd = ["python", str(Path("src") / "main.py"), pdf_path]
+    cmd = ["python", str(PROJECT_ROOT / "src" / "main.py"), pdf_path]
 
     # Ensure the working directory is project root (where app.py is)
     proc = subprocess.run(
         cmd,
+        cwd=str(PROJECT_ROOT),  # <— critical: run as if from repo root
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -66,6 +68,7 @@ st.caption(APP_SUBTITLE)
 with st.sidebar:
     st.header("Run options")
     keep_uploaded_files = st.toggle("Keep uploaded PDFs on disk (debug)", value=False)
+    show_meta = st.toggle("Show system metadata (debug)", value=False)
     st.divider()
     st.write("**How it works**")
     st.write("- Saves uploaded PDF(s) to a temp folder")
@@ -124,7 +127,13 @@ for filename, data, warnings in results:
 
     with col1:
         st.markdown("### JSON output")
-        st.json(data, expanded=False)
+        # Hide meta by default
+        clean_output = {k: v for k, v in data.items() if k != "meta"}
+        st.json(clean_output, expanded=False)
+        # Optional meta view
+        if show_meta and "meta" in data:
+            st.markdown("### System metadata")
+            st.json(data["meta"], expanded=False)
 
         # Download
         json_bytes = json.dumps(data, indent=2).encode("utf-8")

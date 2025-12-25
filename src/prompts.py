@@ -70,7 +70,8 @@ Return JSON with this exact structure:
   "physical_chemical": {{
   "flash_point": {{ "value": string|null, "evidence": string|null, "confidence": number }},
   "ph": {{ "value": string|null, "evidence": string|null, "confidence": number }},
-  "relative_density": {{ "value": string|null, "evidence": string|null, "confidence": number }}
+  "relative_density": {{ "value": string|null, "evidence": string|null, "confidence": number }},
+  "boiling_point": {{ "value": string|null, "evidence": string|null, "confidence": number }}
 }},
   "hazards": {{
     "ghs_signal_word": {{ "value": string|null, "evidence": string|null, "confidence": number }},
